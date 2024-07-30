@@ -1,0 +1,58 @@
+MODEL:
+  PRETRAIN_CHOICE: 'imagenet'
+  PRETRAIN_PATH: 'E:\code\TransReID-3modal-ttt-main-train-phase\logs_rgbnt201\baseline+CIM16-70.0% 71.9% 84.8% 90.7%'
+  METRIC_LOSS_TYPE: 'triplet'
+  IF_LABELSMOOTH: 'off'
+  IF_WITH_CENTER: 'no'
+  NAME: 'transformer'
+  NO_MARGIN: True
+  DEVICE_ID: ('0')
+  TRANSFORMER_TYPE: 'vit_base_patch16_224_TransReID'
+  STRIDE_SIZE: [16, 16]
+  TRAIN_MODE: 'RNT'
+
+INPUT:
+  SIZE_TRAIN: [256, 128]
+  SIZE_TEST: [256, 128]
+  PROB: 0.5 # random horizontal flip
+  RE_PROB: 0.5 # random erasing
+  PADDING: 10
+  PIXEL_MEAN: [0.5, 0.5, 0.5]
+  PIXEL_STD: [0.5, 0.5, 0.5]
+
+DATASETS:
+  NAMES: ('rgbnt201')
+  ROOT_DIR: ('E:\\datasets\\')
+
+DATALOADER:
+  SAMPLER: 'softmax'
+  NUM_INSTANCE: 4
+  NUM_WORKERS: 8
+
+SOLVER:
+  OPTIMIZER_NAME: 'SGD'
+  MAX_EPOCHS: 6
+  BASE_LR: 0.001
+  IMS_PER_BATCH: 16
+  WARMUP_METHOD: 'linear'
+  LARGE_FC_LR: False
+  CHECKPOINT_PERIOD: 5
+  LOG_PERIOD: 10
+  EVAL_PERIOD: 1
+  WEIGHT_DECAY:  1e-4
+  WEIGHT_DECAY_BIAS: 1e-4
+  BIAS_LR_FACTOR: 2
+  # SEED: 1
+
+TEST:
+  EVAL: True
+  IMS_PER_BATCH: 32
+  RE_RANKING: False
+  # WEIGHT: '/data2/zi.wang/code/TransReID-multi-TTT/logs_rgbnt201_multi_concat/vit_base_lr0.008_b32_SharePara_3Mloss1_IDMl1_15_weight0.5/transformer_best.pth'
+  # WEIGHT: 'E:\code\TransReID-3modal-ttt-main-AAAI2024\logs_rgbnt201\baseline+CIM16-70.0% 71.9% 84.8% 90.7%\transformer_best.pth'
+  NECK_FEAT: 'after'
+  FEAT_NORM: 'yes'
+
+OUTPUT_DIR: './logs_rgbnt201/loss_weight_1_1'
+
+
