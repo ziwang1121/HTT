@@ -44,22 +44,22 @@ Multi-modality Vehicle ReID Datasets: RGBNT100 & RGBN300 ([GitHub](https://githu
 
 ~~~python
 # train RGBN300
-python train.py --config_file configs/RGBN300/vit_base.py
+python train.py --config_file configs/RGBN300/vit_base.yml
 # train RGBNT100
-python train.py --config_file configs/RGBNT100/vit_base.py
+python train.py --config_file configs/RGBNT100/vit_base.yml
 # train RGBNT201
-python train.py --config_file configs/RGBNT201/vit_base.py
+python train.py --config_file configs/RGBNT201/vit_base.yml
 ~~~
 
 ## Test-time Training
 
 ~~~python
 # test-time training RGBN300
-python test_time_train.py --config_file configs/RGBN300/vit_base_ttt.py
+python test_time_train.py --config_file configs/RGBN300/vit_base_ttt.yml
 # test-time training RGBNT100
-python test_time_train.py --config_file configs/RGBNT100/vit_base_ttt.py
+python test_time_train.py --config_file configs/RGBNT100/vit_base_ttt.yml
 # test-time training RGBNT201
-python test_time_train.py --config_file configs/RGBNT201/vit_base_ttt.py
+python test_time_train.py --config_file configs/RGBNT201/vit_base_ttt.yml
 ~~~
 
 ## Test 
@@ -70,11 +70,11 @@ Or you can run the following code to test, and note that the test model path nee
 
 ~~~python
 # test RGBN300
-python test.py --config_file configs/RGBN300/vit_base_ttt.py
+python test.py --config_file configs/RGBN300/vit_base_ttt.yml
 # test RGBNT100
-python test.py --config_file configs/RGBNT100/vit_base_ttt.py
+python test.py --config_file configs/RGBNT100/vit_base_ttt.yml
 # test RGBNT201
-python test.py --config_file configs/RGBNT201/vit_base_ttt.py
+python test.py --config_file configs/RGBNT201/vit_base_ttt.yml
 ~~~
 
 ---
