@@ -407,31 +407,76 @@ class TransReID(nn.Module):
         x = self.forward_features(x, cam_label, view_label)
         return x
 
-    def load_param(self, model_path):
+    def load_param(self, model_path, test_time_training=False):
         param_dict = torch.load(model_path, map_location='cpu')
-        if 'model' in param_dict:
-            param_dict = param_dict['model']
-        if 'state_dict' in param_dict:
-            param_dict = param_dict['state_dict']
-        for k, v in param_dict.items():
-            if 'head' in k or 'dist' in k:
-                continue
-            if 'patch_embed.proj.weight' in k and len(v.shape) < 4:
-                # For old models that I trained prior to conv based patchification
-                O, I, H, W = self.patch_embed.proj.weight.shape
-                v = v.reshape(O, -1, H, W)
-            elif k == 'pos_embed' and v.shape != self.pos_embed.shape:
-                # To resize pos embedding when using model at different size from pretrained weights
-                if 'distilled' in model_path:
-                    print('distill need to choose right cls token in the pth')
-                    v = torch.cat([v[:, 0:1], v[:, 2:]], dim=1)
-                v = resize_pos_embed(v, self.pos_embed, self.patch_embed.num_y, self.patch_embed.num_x)
-            try:
-                self.state_dict()[k].copy_(v)
-            except:
-                print('===========================ERROR=========================')
-                print('shape do not match in k :{}: param_dict{} vs self.state_dict(){}'.format(k, v.shape, self.state_dict()[k].shape))
 
+        # for var_name in self.state_dict():
+        #     print(var_name)
+
+        # for k, v in param_dict.items():
+        #     print(k)
+        if not test_time_training:
+
+            if 'model' in param_dict:
+                param_dict = param_dict['model']
+            if 'state_dict' in param_dict:
+                param_dict = param_dict['state_dict']
+            for k, v in param_dict.items():
+                # import pdb
+                # pdb.set_trace()
+                if 'head' in k or 'dist' in k:
+                    continue
+                if 'patch_embed.proj.weight' in k and len(v.shape) < 4:
+                    # For old models that I trained prior to conv based patchification
+                    O, I, H, W = self.patch_embed.proj.weight.shape
+                    v = v.reshape(O, -1, H, W)
+                elif k == 'pos_embed' and v.shape != self.pos_embed.shape:
+                    # To resize pos embedding when using model at different size from pretrained weights
+                    if 'distilled' in model_path:
+                        print('distill need to choose right cls token in the pth')
+                        v = torch.cat([v[:, 0:1], v[:, 2:]], dim=1)
+                    v = resize_pos_embed(v, self.pos_embed, self.patch_embed.num_y, self.patch_embed.num_x)
+                try:
+                    self.state_dict()[k].copy_(v)
+                except:
+                    print('===========================ERROR=========================')
+                    print('shape do not match in k :{}: param_dict{} vs self.state_dict(){}'.format(k, v.shape, self.state_dict()[k].shape))
+        else:
+            print("test time training load param")
+
+            # for var_name in self.state_dict():
+            #     print(var_name)
+            # print("++++")
+            # for k, v in param_dict.items():
+            #     print(k)
+
+            if 'model' in param_dict:
+                param_dict = param_dict['model']
+            if 'state_dict' in param_dict:
+                param_dict = param_dict['state_dict']
+            for k, v in param_dict.items():
+                # import pdb
+                # pdb.set_trace()
+                if 'classfier' or 'bottleneck' in k:
+                    continue
+                if 'head' in k or 'dist' in k:
+                    continue
+                if 'patch_embed.proj.weight' in k and len(v.shape) < 4:
+                    # For old models that I trained prior to conv based patchification
+                    O, I, H, W = self.patch_embed.proj.weight.shape
+                    v = v.reshape(O, -1, H, W)
+                elif k == 'pos_embed' and v.shape != self.pos_embed.shape:
+                    # To resize pos embedding when using model at different size from pretrained weights
+                    if 'distilled' in model_path:
+                        print('distill need to choose right cls token in the pth')
+                        v = torch.cat([v[:, 0:1], v[:, 2:]], dim=1)
+                    v = resize_pos_embed(v, self.pos_embed, self.patch_embed.num_y, self.patch_embed.num_x)
+                try: 
+                    k_new = k[5:]
+                    self.state_dict()[k_new].copy_(v)
+                except:
+                    print('===========================ERROR=========================')
+                    print('shape do not match in k :{}: param_dict{} vs self.state_dict(){}'.format(k, v.shape, self.state_dict()[k].shape))
 
 def resize_pos_embed(posemb, posemb_new, hight, width):
     # Rescale the grid of position embeddings when loading from state_dict. Adapted from
