@@ -155,13 +155,17 @@ class build_transformer(nn.Module):
         if cfg.MODEL.TRANSFORMER_TYPE == 'deit_small_patch16_224_TransReID':
             self.in_planes = 384
         if pretrain_choice == 'imagenet':
-            self.base.load_param(model_path)
+            # # training 
+            # self.base.load_param(model_path)
+            
+            # # test time training 
+            self.base.load_param(model_path, test_time_training=True)
             
             print('Loading pretrained ImageNet model......from {}'.format(model_path))
 
         self.gap = nn.AdaptiveAvgPool2d(1)
 
-        self.num_classes = num_classes
+        self.num_classes = 171
         self.ID_LOSS_TYPE = cfg.MODEL.ID_LOSS_TYPE
         if self.ID_LOSS_TYPE == 'arcface':
             print('using {} with s:{}, m: {}'.format(self.ID_LOSS_TYPE,cfg.SOLVER.COSINE_SCALE,cfg.SOLVER.COSINE_MARGIN))
