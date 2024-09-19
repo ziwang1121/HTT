@@ -109,14 +109,14 @@ def make_loss_ttt(cfg, num_classes):    # modified by gu
         def loss_func(score, feat, target, target_cam):
             # import pdb
             # pdb.set_trace()
-            if isinstance(feat, list):
-                if target[0] == target[1]:
-                    MMM_LOSS = criterion_m(F.normalize(feat[1], p=2, dim=1), F.normalize(feat[2], p=2, dim=1), F.normalize(feat[3], p=2, dim=1), target)
-                    TTT_LOSS = MMM_LOSS
-                else:
-                    IDM_LOSS = criterion_i(F.normalize(feat[1], p=2, dim=1), F.normalize(feat[2], p=2, dim=1), F.normalize(feat[3], p=2, dim=1), target)
-                    MMM_LOSS = criterion_m(F.normalize(feat[1], p=2, dim=1), F.normalize(feat[2], p=2, dim=1), F.normalize(feat[3], p=2, dim=1), target)
-                    TTT_LOSS = MMM_LOSS + IDM_LOSS
+            pseudo_label = score.max(1)[1]
+
+            MMM_LOSS = criterion_m(F.normalize(feat[1], p=2, dim=1), F.normalize(feat[2], p=2, dim=1), F.normalize(feat[3], p=2, dim=1), pseudo_label)
+            if pseudo_label[0] != pseudo_label[1]:
+                IDM_LOSS = criterion_i(F.normalize(feat[1], p=2, dim=1), F.normalize(feat[2], p=2, dim=1), F.normalize(feat[3], p=2, dim=1), pseudo_label)
+                TTT_LOSS = MMM_LOSS + IDM_LOSS
+            else:
+                TTT_LOSS = MMM_LOSS
             return cfg.MODEL.TRIPLET_LOSS_WEIGHT * TTT_LOSS
 
 
