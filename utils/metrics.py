@@ -25,7 +25,7 @@ def cosine_similarity(qf, gf):
     return dist_mat
 
 
-def eval_func(distmat, q_pids, g_pids, q_camids, g_camids, q_timeids, g_timeids, max_rank=50):
+def eval_func(distmat, q_pids, g_pids, q_camids, g_camids, max_rank=50):
     """Evaluation with market1501 metric
         Key: for each query identity, its gallery images from the same camera view are discarded.
         """
@@ -49,11 +49,11 @@ def eval_func(distmat, q_pids, g_pids, q_camids, g_camids, q_timeids, g_timeids,
         # get query pid and camid
         q_pid = q_pids[q_idx]
         q_camid = q_camids[q_idx]
-        q_timeid = q_timeids[q_idx]
+        # q_timeid = q_timeids[q_idx]
 
         # remove gallery samples that have the same pid and camid with query
         order = indices[q_idx]  # select one row
-        remove = (g_pids[order] == q_pid) & (g_camids[order] == q_camid) | (g_timeids[order] == q_timeid)
+        remove = (g_pids[order] == q_pid) & (g_camids[order] == q_camid)
         keep = np.invert(remove)
 
         # compute cmc curve
@@ -150,7 +150,7 @@ class R1_mAP_eval():
         else:
             print('=> Computing DistMat with euclidean_distance')
             distmat = euclidean_distance(qf, gf)
-        cmc, mAP = eval_func(distmat, q_pids, g_pids, q_camids, g_camids, q_timeids, g_timeids)
+        cmc, mAP = eval_func(distmat, q_pids, g_pids, q_camids, g_camids)
 
         return cmc, mAP, distmat, self.pids, self.camids, qf, gf
 
