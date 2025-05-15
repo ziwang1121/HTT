@@ -1,5 +1,7 @@
 This is the official codes of our paper ***Heterogeneous Test-Time Training for Multi-Modal Person Re-identification*** [Paper Link](https://ojs.aaai.org/index.php/AAAI/article/view/28398) accepted by **AAAI 2024**.
 
+Should you encounter any issues when running the original code, you may try this alternative version: https://drive.google.com/file/d/199jCO4F9kFvDn5BC59YnGaJgq2AgxBH-/view?usp=drive_link
+
 ## Overall Introduction
 
 Inspired by the development of Test-time Training (TTT), we propose a novel method for the multi-modal person ReID task, termed ***Heterogeneous Test-time Training (HTT)***, to improve performance on unseen test data by utilizing **the relationship between heterogeneous modalities** and **fine-tuning the network before inference**.
