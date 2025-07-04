@@ -1,6 +1,6 @@
 MODEL:
   PRETRAIN_CHOICE: 'imagenet'
-  PRETRAIN_PATH: 'E:\code\TransReID-3modal-ttt-main-RGBNT201\logs_rgbnt100\baseline+CIM16+lr0.001\transformer_best.pth'
+  PRETRAIN_PATH: '/root/shared-nvme/HTT-main/logs_rgbnt100/baseline+onlyCIM/transformer_best.pth'
   METRIC_LOSS_TYPE: 'triplet'
   IF_LABELSMOOTH: 'off'
   IF_WITH_CENTER: 'no'
@@ -22,7 +22,7 @@ INPUT:
 
 DATASETS:
   NAMES: ('rgbnt100')
-  ROOT_DIR: ('E:\\datasets\\')
+  ROOT_DIR: ('/root/shared-nvme/dataset')
 
 DATALOADER:
   SAMPLER: 'softmax'

@@ -406,6 +406,12 @@ class TransReID(nn.Module):
     def forward(self, x, cam_label=None, view_label=None):
         x = self.forward_features(x, cam_label, view_label)
         return x
+    
+    def load_param_finetune(self, model_path):
+        param_dict = torch.load(model_path)
+        for i in param_dict:
+            self.state_dict()[i].copy_(param_dict[i])
+        print('Loading pretrained model for finetuning from {}'.format(model_path))
 
     def load_param(self, model_path, test_time_training=False):
         param_dict = torch.load(model_path, map_location='cpu')

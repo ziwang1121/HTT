@@ -125,7 +125,7 @@ class Backbone(nn.Module):
 
 
 class build_transformer(nn.Module):
-    def __init__(self, num_classes, camera_num, view_num, cfg, factory):
+    def __init__(self, num_classes, camera_num, view_num, cfg, factory, mode):
         super(build_transformer, self).__init__()
         last_stride = cfg.MODEL.LAST_STRIDE
         model_path = cfg.MODEL.PRETRAIN_PATH
@@ -154,18 +154,17 @@ class build_transformer(nn.Module):
 
         if cfg.MODEL.TRANSFORMER_TYPE == 'deit_small_patch16_224_TransReID':
             self.in_planes = 384
-        if pretrain_choice == 'imagenet':
-            # # training 
-            # self.base.load_param(model_path)
-            
-            # # test time training 
-            self.base.load_param(model_path, test_time_training=True)
-            
+        if pretrain_choice == 'imagenet' and mode == 'train':
+            print(mode)
+            self.base.load_param(model_path)
             print('Loading pretrained ImageNet model......from {}'.format(model_path))
+        else:
+            self.base.load_param(model_path, test_time_training=True)
+            print('Loading pretrained model for test time training from {}'.format(model_path))
 
         self.gap = nn.AdaptiveAvgPool2d(1)
 
-        self.num_classes = 171
+        self.num_classes = num_classes
         self.ID_LOSS_TYPE = cfg.MODEL.ID_LOSS_TYPE
         if self.ID_LOSS_TYPE == 'arcface':
             print('using {} with s:{}, m: {}'.format(self.ID_LOSS_TYPE,cfg.SOLVER.COSINE_SCALE,cfg.SOLVER.COSINE_MARGIN))
@@ -269,13 +268,13 @@ __factory_T_type = {
     'deit_small_patch16_224_TransReID': deit_small_patch16_224_TransReID
 }
 
-def make_model(cfg, num_class, camera_num, view_num, train_mode, fuse_strategy):
+def make_model(cfg, num_class, camera_num, view_num, train_mode, fuse_strategy, mode):
     if cfg.MODEL.NAME == 'transformer':
         if cfg.MODEL.JPM:
             # model = build_transformer_local(num_class, camera_num, view_num, cfg, __factory_T_type, rearrange=cfg.MODEL.RE_ARRANGE)
             print('===========building transformer with JPM module ===========')
         else:
-            model = build_transformer(num_class, camera_num, view_num, cfg, __factory_T_type)
+            model = build_transformer(num_class, camera_num, view_num, cfg, __factory_T_type, mode)
             print('===========building transformer===========')
     else:
         model = Backbone(num_class, cfg)

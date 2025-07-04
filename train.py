@@ -69,7 +69,7 @@ if __name__ == '__main__':
 
     fuse_strategy = cfg.MODEL.FUSE_STRATEGY
 
-    model = make_model(cfg, num_class=num_classes, camera_num=camera_num, view_num = view_num, train_mode=train_mode, fuse_strategy=fuse_strategy)
+    model = make_model(cfg, num_class=num_classes, camera_num=camera_num, view_num = view_num, train_mode=train_mode, fuse_strategy=fuse_strategy, mode='train')
 
     loss_func, center_criterion = make_loss(cfg, num_classes=num_classes)
 

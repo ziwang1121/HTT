@@ -1,6 +1,6 @@
 MODEL:
   PRETRAIN_CHOICE: 'imagenet'
-  PRETRAIN_PATH: 'C:\Users\ziwang\.conda\jx_vit_base_p16_224-80ecf9dd.pth'
+  PRETRAIN_PATH: '/root/shared-nvme/dataset/jx_vit_base_p16_224-80ecf9dd.pth'
   METRIC_LOSS_TYPE: 'triplet'
   IF_LABELSMOOTH: 'off'
   IF_WITH_CENTER: 'no'
@@ -22,7 +22,7 @@ INPUT:
 
 DATASETS:
   NAMES: ('rgbnt201')
-  ROOT_DIR: ('E:\\datasets\\')
+  ROOT_DIR: ('/root/shared-nvme/dataset')
 
 DATALOADER:
   SAMPLER: 'softmax_triplet'

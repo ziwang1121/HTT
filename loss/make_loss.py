@@ -76,9 +76,7 @@ def make_loss(cfg, num_classes):    # modified by gu
                             MMM_LOSS = criterion_m(F.normalize(feat[1], p=2, dim=1), F.normalize(feat[2], p=2, dim=1), F.normalize(feat[3], p=2, dim=1), target)
 
                             TRI_LOSS = 0.5 * MMM_LOSS + 0.5 * IDM_LOSS + triplet(feat[0], target)[0]
-                            # TRI_LOSS = triplet(feat[0], target)[0]
-                            # TRI_LOSS = 0.5 * IDM_LOSS + triplet(feat[0], target)[0]
-                            # TRI_LOSS = 0.5 * MMM_LOSS + triplet(feat[0], target)[0]
+
                     else:
                             TRI_LOSS = triplet(feat, target)[0]
                     # print("ID_LOSS", ID_LOSS)
@@ -107,20 +105,29 @@ def make_loss_ttt(cfg, num_classes):    # modified by gu
 
     if sampler == 'softmax':
         def loss_func(score, feat, target, target_cam):
-            # import pdb
-            # pdb.set_trace()
-            pseudo_label = score.max(1)[1]
+            if isinstance(feat, list):
+                id = []
+                # print(score)
+                score = score.cpu().detach().numpy().tolist()
+                id.append(score[0].index(max(score[0])))
+                id.append(score[1].index(max(score[1])))
+                # print(id)
+                if id[0] != id[1]:
+                    IDM_LOSS = criterion_i(F.normalize(feat[1], p=2, dim=1), F.normalize(feat[2], p=2, dim=1), F.normalize(feat[3], p=2, dim=1), torch.Tensor(id))
+                    MMM_LOSS = criterion_m(F.normalize(feat[1], p=2, dim=1), F.normalize(feat[2], p=2, dim=1), F.normalize(feat[3], p=2, dim=1), torch.Tensor(id))
 
-            MMM_LOSS = criterion_m(F.normalize(feat[1], p=2, dim=1), F.normalize(feat[2], p=2, dim=1), F.normalize(feat[3], p=2, dim=1), pseudo_label)
-            if pseudo_label[0] != pseudo_label[1]:
-                IDM_LOSS = criterion_i(F.normalize(feat[1], p=2, dim=1), F.normalize(feat[2], p=2, dim=1), F.normalize(feat[3], p=2, dim=1), pseudo_label)
-                TTT_LOSS = MMM_LOSS + IDM_LOSS
-            else:
-                TTT_LOSS = MMM_LOSS
-            return cfg.MODEL.TRIPLET_LOSS_WEIGHT * TTT_LOSS
+                    # print(MMM_LOSS, IDM_LOSS)
+                    TRI_LOSS = 0.3 * MMM_LOSS + 0.3 * IDM_LOSS
+                else:
+                    # print("same id")
+                    MMM_LOSS = criterion_m(F.normalize(feat[1], p=2, dim=1), F.normalize(feat[2], p=2, dim=1), F.normalize(feat[3], p=2, dim=1), torch.Tensor(id))
+
+                    TRI_LOSS = 0.3 * MMM_LOSS
+            return cfg.MODEL.TRIPLET_LOSS_WEIGHT * TRI_LOSS
 
 
     else:
         print('expected sampler should be softmax, triplet, softmax_triplet or softmax_triplet_center'
               'but got {}'.format(cfg.DATALOADER.SAMPLER))
     return loss_func, center_criterion
+

@@ -1,0 +1,570 @@
+2025-04-21 21:04:43,896 transreid INFO: Saving model in the path :./logs_rgbnt201/CIM_margin/margin_0.5
+2025-04-21 21:04:43,896 transreid INFO: Namespace(config_file='configs/RGBNT201/vit_base.yml', opts=[], local_rank=0)
+2025-04-21 21:04:43,896 transreid INFO: Loaded configuration file configs/RGBNT201/vit_base.yml
+2025-04-21 21:04:43,896 transreid INFO: 
+MODEL:
+  PRETRAIN_CHOICE: 'imagenet'
+  PRETRAIN_PATH: '/data/wangzi/jx_vit_base_p16_224-80ecf9dd.pth'
+  METRIC_LOSS_TYPE: 'triplet'
+  IF_LABELSMOOTH: 'off'
+  IF_WITH_CENTER: 'no'
+  NAME: 'transformer'
+  NO_MARGIN: True
+  DEVICE_ID: ('0')
+  TRANSFORMER_TYPE: 'vit_base_patch16_224_TransReID'
+  STRIDE_SIZE: [16, 16]
+  TRAIN_MODE: 'RNT'
+
+INPUT:
+  SIZE_TRAIN: [256, 128]
+  SIZE_TEST: [256, 128]
+  PROB: 0.5 # random horizontal flip
+  RE_PROB: 0.5 # random erasing
+  PADDING: 10
+  PIXEL_MEAN: [0.5, 0.5, 0.5]
+  PIXEL_STD: [0.5, 0.5, 0.5]
+
+DATASETS:
+  NAMES: ('rgbnt201')
+  ROOT_DIR: ('/data/datasets/')
+
+DATALOADER:
+  SAMPLER: 'softmax_triplet'
+  NUM_INSTANCE: 4
+  NUM_WORKERS: 8
+
+SOLVER:
+  OPTIMIZER_NAME: 'SGD'
+  MAX_EPOCHS: 80
+  BASE_LR: 0.008
+  IMS_PER_BATCH: 32
+  WARMUP_METHOD: 'linear'
+  LARGE_FC_LR: False
+  CHECKPOINT_PERIOD: 5
+  LOG_PERIOD: 50
+  EVAL_PERIOD: 5
+  WEIGHT_DECAY:  1e-4
+  WEIGHT_DECAY_BIAS: 1e-4
+  BIAS_LR_FACTOR: 2
+  # SEED: 1
+
+TEST:
+  EVAL: True
+  IMS_PER_BATCH: 256
+  RE_RANKING: False
+  WEIGHT: 'E:\code\TransReID-3modal-ttt-main-AAAI2024\logs_rgbnt201\baseline+CIM15-68.5% 71.1% 82.7% 88.9%\transformer_best.pth'
+  # WEIGHT: ''
+  NECK_FEAT: 'after'
+  FEAT_NORM: 'yes'
+
+OUTPUT_DIR: './logs_rgbnt201/CIM_margin/margin_0.5'
+
+
+
+2025-04-21 21:04:43,896 transreid INFO: Running with config:
+DATALOADER:
+  NUM_INSTANCE: 4
+  NUM_WORKERS: 8
+  SAMPLER: softmax_triplet
+DATASETS:
+  NAMES: rgbnt201
+  ROOT_DIR: /data/datasets/
+INPUT:
+  PADDING: 10
+  PIXEL_MEAN: [0.5, 0.5, 0.5]
+  PIXEL_STD: [0.5, 0.5, 0.5]
+  PROB: 0.5
+  RE_PROB: 0.5
+  SIZE_TEST: [256, 128]
+  SIZE_TRAIN: [256, 128]
+MODEL:
+  ATT_DROP_RATE: 0.0
+  COS_LAYER: False
+  DEVICE: cuda
+  DEVICE_ID: 0
+  DEVIDE_LENGTH: 4
+  DIST_TRAIN: False
+  DROP_OUT: 0.0
+  DROP_PATH: 0.1
+  FUSE_STRATEGY: False
+  ID_LOSS_TYPE: softmax
+  ID_LOSS_WEIGHT: 1.0
+  IF_LABELSMOOTH: off
+  IF_WITH_CENTER: no
+  JPM: False
+  LAST_STRIDE: 1
+  METRIC_LOSS_TYPE: triplet
+  NAME: transformer
+  NECK: bnneck
+  NO_MARGIN: True
+  PRETRAIN_CHOICE: imagenet
+  PRETRAIN_PATH: /data/wangzi/jx_vit_base_p16_224-80ecf9dd.pth
+  RE_ARRANGE: True
+  SHIFT_NUM: 5
+  SHUFFLE_GROUP: 2
+  SIE_CAMERA: False
+  SIE_COE: 3.0
+  SIE_VIEW: False
+  STRIDE_SIZE: [16, 16]
+  TRAIN_MODE: RNT
+  TRANSFORMER_TYPE: vit_base_patch16_224_TransReID
+  TRIPLET_LOSS_WEIGHT: 1.0
+OUTPUT_DIR: ./logs_rgbnt201/CIM_margin/margin_0.5
+SOLVER:
+  BASE_LR: 0.008
+  BIAS_LR_FACTOR: 2
+  CENTER_LOSS_WEIGHT: 0.0005
+  CENTER_LR: 0.5
+  CHECKPOINT_PERIOD: 5
+  CIM_MARGIN: 0.3
+  COSINE_MARGIN: 0.5
+  COSINE_SCALE: 30
+  EVAL_PERIOD: 5
+  GAMMA: 0.1
+  IMS_PER_BATCH: 32
+  LARGE_FC_LR: False
+  LOG_PERIOD: 50
+  MARGIN: 0.3
+  MAX_EPOCHS: 80
+  MOMENTUM: 0.9
+  OPTIMIZER_NAME: SGD
+  SEED: 1234
+  STEPS: (40, 70)
+  WARMUP_EPOCHS: 5
+  WARMUP_FACTOR: 0.01
+  WARMUP_METHOD: linear
+  WEIGHT_DECAY: 0.0001
+  WEIGHT_DECAY_BIAS: 0.0001
+TEST:
+  DIST_MAT: dist_mat.npy
+  EVAL: True
+  FEAT_NORM: yes
+  IMS_PER_BATCH: 256
+  NECK_FEAT: after
+  RE_RANKING: False
+  WEIGHT: E:\code\TransReID-3modal-ttt-main-AAAI2024\logs_rgbnt201\baseline+CIM15-68.5% 71.1% 82.7% 88.9%\transformer_best.pth
+=> RGBNT201 loaded
+Dataset statistics:
+  ----------------------------------------
+  subset   | # ids | # images | # cameras
+  ----------------------------------------
+  train    |   171 |     3951 |         4
+  query    |    30 |      836 |         2
+  gallery  |    30 |      836 |         2
+  ----------------------------------------
+using Transformer_type: vit_base_patch16_224_TransReID as a backbone
+using stride: [16, 16], and patch number is num_y16 * num_x8
+using drop_out rate is : 0.0
+using attn_drop_out rate is : 0.0
+using drop_path rate is : 0.1
+train
+Resized position embedding from size:torch.Size([1, 197, 768]) to size: torch.Size([1, 129, 768]) with height:16 width: 8
+Loading pretrained ImageNet model......from /data/wangzi/jx_vit_base_p16_224-80ecf9dd.pth
+===========building transformer===========
+using soft triplet loss for training
+2025-04-21 21:04:46,254 transreid.train INFO: start training
+2025-04-21 21:05:11,621 transreid.train INFO: Epoch[1] Iteration[50/117] Loss: 9.085, Acc: 0.152, Base Lr: 1.66e-03
+2025-04-21 21:05:35,380 transreid.train INFO: Epoch[1] Iteration[100/117] Loss: 7.664, Acc: 0.261, Base Lr: 1.66e-03
+2025-04-21 21:05:43,350 transreid.train INFO: Epoch 1 done. Time per batch: 0.492[s] Speed: 65.1[samples/s]
+2025-04-21 21:06:08,787 transreid.train INFO: Epoch[2] Iteration[50/117] Loss: 3.180, Acc: 0.721, Base Lr: 3.25e-03
+2025-04-21 21:06:32,571 transreid.train INFO: Epoch[2] Iteration[100/117] Loss: 2.559, Acc: 0.797, Base Lr: 3.25e-03
+2025-04-21 21:06:39,577 transreid.train INFO: Epoch 2 done. Time per batch: 0.485[s] Speed: 66.0[samples/s]
+2025-04-21 21:07:03,901 transreid.train INFO: Epoch[3] Iteration[50/117] Loss: 1.425, Acc: 0.977, Base Lr: 4.83e-03
+2025-04-21 21:07:28,587 transreid.train INFO: Epoch[3] Iteration[100/117] Loss: 1.329, Acc: 0.978, Base Lr: 4.83e-03
+2025-04-21 21:07:36,786 transreid.train INFO: Epoch 3 done. Time per batch: 0.493[s] Speed: 64.9[samples/s]
+2025-04-21 21:08:02,310 transreid.train INFO: Epoch[4] Iteration[50/117] Loss: 1.013, Acc: 0.984, Base Lr: 6.42e-03
+2025-04-21 21:08:28,705 transreid.train INFO: Epoch[4] Iteration[100/117] Loss: 0.896, Acc: 0.990, Base Lr: 6.42e-03
+2025-04-21 21:08:36,434 transreid.train INFO: Epoch 4 done. Time per batch: 0.514[s] Speed: 62.2[samples/s]
+2025-04-21 21:09:02,216 transreid.train INFO: Epoch[5] Iteration[50/117] Loss: 0.732, Acc: 0.999, Base Lr: 7.92e-03
+2025-04-21 21:09:24,821 transreid.train INFO: Epoch[5] Iteration[100/117] Loss: 0.723, Acc: 0.997, Base Lr: 7.92e-03
+2025-04-21 21:09:32,234 transreid.train INFO: Epoch 5 done. Time per batch: 0.485[s] Speed: 66.0[samples/s]
+/data/wangzi/HTT-main/utils/metrics.py:12: UserWarning: This overload of addmm_ is deprecated:
+	addmm_(Number beta, Number alpha, Tensor mat1, Tensor mat2)
+Consider using one of the following signatures instead:
+	addmm_(Tensor mat1, Tensor mat2, *, Number beta, Number alpha) (Triggered internally at ../torch/csrc/utils/python_arg_parser.cpp:1519.)
+  dist_mat.addmm_(1, -2, qf, gf.t())
+The test feature is normalized
+qf.num, gf.num 836 836
+qf.shape, gf.shape torch.Size([2304]) torch.Size([2304])
+=> Computing DistMat with euclidean_distance
+2025-04-21 21:09:39,551 transreid.train INFO: Validation Results - Epoch: 5
+2025-04-21 21:09:39,551 transreid.train INFO: mAP: 52.7%
+2025-04-21 21:09:39,551 transreid.train INFO: CMC curve, Rank-1  :53.2%
+2025-04-21 21:09:39,551 transreid.train INFO: CMC curve, Rank-5  :70.0%
+2025-04-21 21:09:39,551 transreid.train INFO: CMC curve, Rank-10 :79.7%
+2025-04-21 21:09:39,551 transreid.train INFO: Best result: 5 52.7% 53.2% 70.0% 79.7%
+2025-04-21 21:10:04,743 transreid.train INFO: Epoch[6] Iteration[50/117] Loss: 0.690, Acc: 0.998, Base Lr: 7.89e-03
+2025-04-21 21:10:29,579 transreid.train INFO: Epoch[6] Iteration[100/117] Loss: 0.653, Acc: 0.999, Base Lr: 7.89e-03
+2025-04-21 21:10:37,305 transreid.train INFO: Epoch 6 done. Time per batch: 0.498[s] Speed: 64.3[samples/s]
+2025-04-21 21:11:01,216 transreid.train INFO: Epoch[7] Iteration[50/117] Loss: 1.768, Acc: 0.974, Base Lr: 7.85e-03
+2025-04-21 21:11:24,284 transreid.train INFO: Epoch[7] Iteration[100/117] Loss: 1.265, Acc: 0.984, Base Lr: 7.85e-03
+2025-04-21 21:11:31,193 transreid.train INFO: Epoch 7 done. Time per batch: 0.465[s] Speed: 68.9[samples/s]
+2025-04-21 21:11:56,268 transreid.train INFO: Epoch[8] Iteration[50/117] Loss: 0.583, Acc: 0.998, Base Lr: 7.80e-03
+2025-04-21 21:12:21,681 transreid.train INFO: Epoch[8] Iteration[100/117] Loss: 0.582, Acc: 0.998, Base Lr: 7.80e-03
+2025-04-21 21:12:29,521 transreid.train INFO: Epoch 8 done. Time per batch: 0.503[s] Speed: 63.6[samples/s]
+2025-04-21 21:12:55,465 transreid.train INFO: Epoch[9] Iteration[50/117] Loss: 0.553, Acc: 1.000, Base Lr: 7.75e-03
+2025-04-21 21:13:21,545 transreid.train INFO: Epoch[9] Iteration[100/117] Loss: 0.530, Acc: 0.999, Base Lr: 7.75e-03
+2025-04-21 21:13:28,481 transreid.train INFO: Epoch 9 done. Time per batch: 0.513[s] Speed: 62.4[samples/s]
+2025-04-21 21:13:54,340 transreid.train INFO: Epoch[10] Iteration[50/117] Loss: 0.508, Acc: 1.000, Base Lr: 7.70e-03
+2025-04-21 21:14:18,995 transreid.train INFO: Epoch[10] Iteration[100/117] Loss: 0.499, Acc: 1.000, Base Lr: 7.70e-03
+2025-04-21 21:14:26,839 transreid.train INFO: Epoch 10 done. Time per batch: 0.507[s] Speed: 63.1[samples/s]
+The test feature is normalized
+qf.num, gf.num 836 836
+qf.shape, gf.shape torch.Size([2304]) torch.Size([2304])
+=> Computing DistMat with euclidean_distance
+2025-04-21 21:14:33,703 transreid.train INFO: Validation Results - Epoch: 10
+2025-04-21 21:14:33,703 transreid.train INFO: mAP: 59.0%
+2025-04-21 21:14:33,704 transreid.train INFO: CMC curve, Rank-1  :59.6%
+2025-04-21 21:14:33,704 transreid.train INFO: CMC curve, Rank-5  :74.9%
+2025-04-21 21:14:33,704 transreid.train INFO: CMC curve, Rank-10 :81.9%
+2025-04-21 21:14:33,704 transreid.train INFO: Best result: 10 59.0% 59.6% 74.9% 81.9%
+2025-04-21 21:14:57,954 transreid.train INFO: Epoch[11] Iteration[50/117] Loss: 0.461, Acc: 1.000, Base Lr: 7.63e-03
+2025-04-21 21:15:21,820 transreid.train INFO: Epoch[11] Iteration[100/117] Loss: 0.464, Acc: 0.999, Base Lr: 7.63e-03
+2025-04-21 21:15:29,938 transreid.train INFO: Epoch 11 done. Time per batch: 0.484[s] Speed: 66.2[samples/s]
+2025-04-21 21:15:54,873 transreid.train INFO: Epoch[12] Iteration[50/117] Loss: 0.467, Acc: 0.998, Base Lr: 7.56e-03
+2025-04-21 21:16:20,189 transreid.train INFO: Epoch[12] Iteration[100/117] Loss: 0.459, Acc: 0.999, Base Lr: 7.56e-03
+2025-04-21 21:16:28,451 transreid.train INFO: Epoch 12 done. Time per batch: 0.504[s] Speed: 63.4[samples/s]
+2025-04-21 21:16:53,363 transreid.train INFO: Epoch[13] Iteration[50/117] Loss: 0.433, Acc: 0.999, Base Lr: 7.49e-03
+2025-04-21 21:17:18,917 transreid.train INFO: Epoch[13] Iteration[100/117] Loss: 0.475, Acc: 0.999, Base Lr: 7.49e-03
+2025-04-21 21:17:26,426 transreid.train INFO: Epoch 13 done. Time per batch: 0.504[s] Speed: 63.5[samples/s]
+2025-04-21 21:17:50,626 transreid.train INFO: Epoch[14] Iteration[50/117] Loss: 0.477, Acc: 1.000, Base Lr: 7.41e-03
+2025-04-21 21:18:14,866 transreid.train INFO: Epoch[14] Iteration[100/117] Loss: 0.452, Acc: 1.000, Base Lr: 7.41e-03
+2025-04-21 21:18:23,550 transreid.train INFO: Epoch 14 done. Time per batch: 0.492[s] Speed: 65.0[samples/s]
+2025-04-21 21:18:48,610 transreid.train INFO: Epoch[15] Iteration[50/117] Loss: 0.406, Acc: 0.999, Base Lr: 7.33e-03
+2025-04-21 21:19:14,204 transreid.train INFO: Epoch[15] Iteration[100/117] Loss: 0.408, Acc: 1.000, Base Lr: 7.33e-03
+2025-04-21 21:19:22,414 transreid.train INFO: Epoch 15 done. Time per batch: 0.507[s] Speed: 63.1[samples/s]
+The test feature is normalized
+qf.num, gf.num 836 836
+qf.shape, gf.shape torch.Size([2304]) torch.Size([2304])
+=> Computing DistMat with euclidean_distance
+2025-04-21 21:19:29,862 transreid.train INFO: Validation Results - Epoch: 15
+2025-04-21 21:19:29,862 transreid.train INFO: mAP: 59.8%
+2025-04-21 21:19:29,862 transreid.train INFO: CMC curve, Rank-1  :58.3%
+2025-04-21 21:19:29,862 transreid.train INFO: CMC curve, Rank-5  :73.6%
+2025-04-21 21:19:29,862 transreid.train INFO: CMC curve, Rank-10 :81.3%
+2025-04-21 21:19:29,862 transreid.train INFO: Best result: 15 59.8% 58.3% 73.6% 81.3%
+2025-04-21 21:19:53,920 transreid.train INFO: Epoch[16] Iteration[50/117] Loss: 0.404, Acc: 1.000, Base Lr: 7.24e-03
+2025-04-21 21:20:18,784 transreid.train INFO: Epoch[16] Iteration[100/117] Loss: 0.414, Acc: 1.000, Base Lr: 7.24e-03
+2025-04-21 21:20:26,872 transreid.train INFO: Epoch 16 done. Time per batch: 0.490[s] Speed: 65.3[samples/s]
+2025-04-21 21:20:53,287 transreid.train INFO: Epoch[17] Iteration[50/117] Loss: 0.443, Acc: 0.999, Base Lr: 7.14e-03
+2025-04-21 21:21:18,898 transreid.train INFO: Epoch[17] Iteration[100/117] Loss: 0.427, Acc: 0.999, Base Lr: 7.14e-03
+2025-04-21 21:21:26,968 transreid.train INFO: Epoch 17 done. Time per batch: 0.518[s] Speed: 61.8[samples/s]
+2025-04-21 21:21:51,754 transreid.train INFO: Epoch[18] Iteration[50/117] Loss: 0.400, Acc: 1.000, Base Lr: 7.04e-03
+2025-04-21 21:22:17,388 transreid.train INFO: Epoch[18] Iteration[100/117] Loss: 0.405, Acc: 1.000, Base Lr: 7.04e-03
+2025-04-21 21:22:25,179 transreid.train INFO: Epoch 18 done. Time per batch: 0.502[s] Speed: 63.8[samples/s]
+2025-04-21 21:22:50,459 transreid.train INFO: Epoch[19] Iteration[50/117] Loss: 0.500, Acc: 0.999, Base Lr: 6.94e-03
+2025-04-21 21:23:16,358 transreid.train INFO: Epoch[19] Iteration[100/117] Loss: 0.460, Acc: 1.000, Base Lr: 6.94e-03
+2025-04-21 21:23:24,826 transreid.train INFO: Epoch 19 done. Time per batch: 0.514[s] Speed: 62.2[samples/s]
+2025-04-21 21:23:49,894 transreid.train INFO: Epoch[20] Iteration[50/117] Loss: 0.399, Acc: 0.999, Base Lr: 6.83e-03
+2025-04-21 21:24:12,017 transreid.train INFO: Epoch[20] Iteration[100/117] Loss: 0.397, Acc: 0.999, Base Lr: 6.83e-03
+2025-04-21 21:24:19,581 transreid.train INFO: Epoch 20 done. Time per batch: 0.476[s] Speed: 67.2[samples/s]
+The test feature is normalized
+qf.num, gf.num 836 836
+qf.shape, gf.shape torch.Size([2304]) torch.Size([2304])
+=> Computing DistMat with euclidean_distance
+2025-04-21 21:24:26,580 transreid.train INFO: Validation Results - Epoch: 20
+2025-04-21 21:24:26,581 transreid.train INFO: mAP: 62.3%
+2025-04-21 21:24:26,581 transreid.train INFO: CMC curve, Rank-1  :64.6%
+2025-04-21 21:24:26,581 transreid.train INFO: CMC curve, Rank-5  :77.9%
+2025-04-21 21:24:26,581 transreid.train INFO: CMC curve, Rank-10 :84.4%
+2025-04-21 21:24:26,581 transreid.train INFO: Best result: 20 62.3% 64.6% 77.9% 84.4%
+2025-04-21 21:24:49,968 transreid.train INFO: Epoch[21] Iteration[50/117] Loss: 7.633, Acc: 0.352, Base Lr: 6.72e-03
+2025-04-21 21:25:14,566 transreid.train INFO: Epoch[21] Iteration[100/117] Loss: 8.967, Acc: 0.208, Base Lr: 6.72e-03
+2025-04-21 21:25:22,601 transreid.train INFO: Epoch 21 done. Time per batch: 0.482[s] Speed: 66.4[samples/s]
+2025-04-21 21:25:47,881 transreid.train INFO: Epoch[22] Iteration[50/117] Loss: 9.005, Acc: 0.190, Base Lr: 6.60e-03
+2025-04-21 21:26:12,649 transreid.train INFO: Epoch[22] Iteration[100/117] Loss: 7.422, Acc: 0.284, Base Lr: 6.60e-03
+2025-04-21 21:26:20,881 transreid.train INFO: Epoch 22 done. Time per batch: 0.502[s] Speed: 63.7[samples/s]
+2025-04-21 21:26:46,866 transreid.train INFO: Epoch[23] Iteration[50/117] Loss: 1.655, Acc: 0.878, Base Lr: 6.48e-03
+2025-04-21 21:27:11,791 transreid.train INFO: Epoch[23] Iteration[100/117] Loss: 1.254, Acc: 0.926, Base Lr: 6.48e-03
+2025-04-21 21:27:19,207 transreid.train INFO: Epoch 23 done. Time per batch: 0.507[s] Speed: 63.1[samples/s]
+2025-04-21 21:27:43,032 transreid.train INFO: Epoch[24] Iteration[50/117] Loss: 0.705, Acc: 0.991, Base Lr: 6.35e-03
+2025-04-21 21:28:07,233 transreid.train INFO: Epoch[24] Iteration[100/117] Loss: 0.673, Acc: 0.993, Base Lr: 6.35e-03
+2025-04-21 21:28:15,122 transreid.train INFO: Epoch 24 done. Time per batch: 0.482[s] Speed: 66.4[samples/s]
+2025-04-21 21:28:40,241 transreid.train INFO: Epoch[25] Iteration[50/117] Loss: 0.492, Acc: 0.997, Base Lr: 6.23e-03
+2025-04-21 21:29:05,306 transreid.train INFO: Epoch[25] Iteration[100/117] Loss: 0.487, Acc: 0.998, Base Lr: 6.23e-03
+2025-04-21 21:29:13,428 transreid.train INFO: Epoch 25 done. Time per batch: 0.503[s] Speed: 63.7[samples/s]
+The test feature is normalized
+qf.num, gf.num 836 836
+qf.shape, gf.shape torch.Size([2304]) torch.Size([2304])
+=> Computing DistMat with euclidean_distance
+2025-04-21 21:29:19,478 transreid.train INFO: Validation Results - Epoch: 25
+2025-04-21 21:29:19,478 transreid.train INFO: mAP: 55.7%
+2025-04-21 21:29:19,478 transreid.train INFO: CMC curve, Rank-1  :55.9%
+2025-04-21 21:29:19,478 transreid.train INFO: CMC curve, Rank-5  :73.9%
+2025-04-21 21:29:19,478 transreid.train INFO: CMC curve, Rank-10 :81.9%
+2025-04-21 21:29:19,478 transreid.train INFO: Best result: 20 62.3% 64.6% 77.9% 84.4%
+2025-04-21 21:29:44,914 transreid.train INFO: Epoch[26] Iteration[50/117] Loss: 0.430, Acc: 0.999, Base Lr: 6.09e-03
+2025-04-21 21:30:09,886 transreid.train INFO: Epoch[26] Iteration[100/117] Loss: 0.432, Acc: 0.998, Base Lr: 6.09e-03
+2025-04-21 21:30:18,119 transreid.train INFO: Epoch 26 done. Time per batch: 0.504[s] Speed: 63.4[samples/s]
+2025-04-21 21:30:42,806 transreid.train INFO: Epoch[27] Iteration[50/117] Loss: 0.420, Acc: 0.998, Base Lr: 5.96e-03
+2025-04-21 21:31:06,535 transreid.train INFO: Epoch[27] Iteration[100/117] Loss: 0.413, Acc: 0.999, Base Lr: 5.96e-03
+2025-04-21 21:31:13,942 transreid.train INFO: Epoch 27 done. Time per batch: 0.485[s] Speed: 65.9[samples/s]
+2025-04-21 21:31:40,024 transreid.train INFO: Epoch[28] Iteration[50/117] Loss: 0.392, Acc: 0.999, Base Lr: 5.82e-03
+2025-04-21 21:32:05,067 transreid.train INFO: Epoch[28] Iteration[100/117] Loss: 0.404, Acc: 0.999, Base Lr: 5.82e-03
+2025-04-21 21:32:12,669 transreid.train INFO: Epoch 28 done. Time per batch: 0.511[s] Speed: 62.7[samples/s]
+2025-04-21 21:32:36,947 transreid.train INFO: Epoch[29] Iteration[50/117] Loss: 0.403, Acc: 0.998, Base Lr: 5.68e-03
+2025-04-21 21:33:02,290 transreid.train INFO: Epoch[29] Iteration[100/117] Loss: 0.404, Acc: 0.999, Base Lr: 5.68e-03
+2025-04-21 21:33:09,734 transreid.train INFO: Epoch 29 done. Time per batch: 0.496[s] Speed: 64.5[samples/s]
+2025-04-21 21:33:35,628 transreid.train INFO: Epoch[30] Iteration[50/117] Loss: 0.383, Acc: 0.999, Base Lr: 5.54e-03
+2025-04-21 21:34:01,296 transreid.train INFO: Epoch[30] Iteration[100/117] Loss: 0.381, Acc: 0.999, Base Lr: 5.54e-03
+2025-04-21 21:34:08,867 transreid.train INFO: Epoch 30 done. Time per batch: 0.514[s] Speed: 62.2[samples/s]
+The test feature is normalized
+qf.num, gf.num 836 836
+qf.shape, gf.shape torch.Size([2304]) torch.Size([2304])
+=> Computing DistMat with euclidean_distance
+2025-04-21 21:34:15,629 transreid.train INFO: Validation Results - Epoch: 30
+2025-04-21 21:34:15,629 transreid.train INFO: mAP: 63.1%
+2025-04-21 21:34:15,629 transreid.train INFO: CMC curve, Rank-1  :65.0%
+2025-04-21 21:34:15,629 transreid.train INFO: CMC curve, Rank-5  :80.0%
+2025-04-21 21:34:15,629 transreid.train INFO: CMC curve, Rank-10 :85.9%
+2025-04-21 21:34:15,629 transreid.train INFO: Best result: 30 63.1% 65.0% 80.0% 85.9%
+2025-04-21 21:34:41,828 transreid.train INFO: Epoch[31] Iteration[50/117] Loss: 0.386, Acc: 1.000, Base Lr: 5.39e-03
+2025-04-21 21:35:06,494 transreid.train INFO: Epoch[31] Iteration[100/117] Loss: 0.404, Acc: 1.000, Base Lr: 5.39e-03
+2025-04-21 21:35:14,641 transreid.train INFO: Epoch 31 done. Time per batch: 0.508[s] Speed: 63.0[samples/s]
+2025-04-21 21:35:40,854 transreid.train INFO: Epoch[32] Iteration[50/117] Loss: 0.402, Acc: 0.999, Base Lr: 5.24e-03
+2025-04-21 21:36:05,141 transreid.train INFO: Epoch[32] Iteration[100/117] Loss: 0.396, Acc: 0.999, Base Lr: 5.24e-03
+2025-04-21 21:36:13,144 transreid.train INFO: Epoch 32 done. Time per batch: 0.504[s] Speed: 63.4[samples/s]
+2025-04-21 21:36:38,818 transreid.train INFO: Epoch[33] Iteration[50/117] Loss: 0.369, Acc: 1.000, Base Lr: 5.09e-03
+2025-04-21 21:37:03,059 transreid.train INFO: Epoch[33] Iteration[100/117] Loss: 0.372, Acc: 1.000, Base Lr: 5.09e-03
+2025-04-21 21:37:11,600 transreid.train INFO: Epoch 33 done. Time per batch: 0.504[s] Speed: 63.5[samples/s]
+2025-04-21 21:37:35,472 transreid.train INFO: Epoch[34] Iteration[50/117] Loss: 0.382, Acc: 0.999, Base Lr: 4.94e-03
+2025-04-21 21:38:00,254 transreid.train INFO: Epoch[34] Iteration[100/117] Loss: 0.385, Acc: 0.999, Base Lr: 4.94e-03
+2025-04-21 21:38:07,540 transreid.train INFO: Epoch 34 done. Time per batch: 0.491[s] Speed: 65.2[samples/s]
+2025-04-21 21:38:31,412 transreid.train INFO: Epoch[35] Iteration[50/117] Loss: 0.359, Acc: 1.000, Base Lr: 4.79e-03
+2025-04-21 21:38:56,574 transreid.train INFO: Epoch[35] Iteration[100/117] Loss: 0.362, Acc: 1.000, Base Lr: 4.79e-03
+2025-04-21 21:39:04,348 transreid.train INFO: Epoch 35 done. Time per batch: 0.490[s] Speed: 65.3[samples/s]
+The test feature is normalized
+qf.num, gf.num 836 836
+qf.shape, gf.shape torch.Size([2304]) torch.Size([2304])
+=> Computing DistMat with euclidean_distance
+2025-04-21 21:39:11,647 transreid.train INFO: Validation Results - Epoch: 35
+2025-04-21 21:39:11,648 transreid.train INFO: mAP: 63.7%
+2025-04-21 21:39:11,648 transreid.train INFO: CMC curve, Rank-1  :65.9%
+2025-04-21 21:39:11,648 transreid.train INFO: CMC curve, Rank-5  :79.5%
+2025-04-21 21:39:11,648 transreid.train INFO: CMC curve, Rank-10 :86.0%
+2025-04-21 21:39:11,648 transreid.train INFO: Best result: 35 63.7% 65.9% 79.5% 86.0%
+2025-04-21 21:39:36,363 transreid.train INFO: Epoch[36] Iteration[50/117] Loss: 0.359, Acc: 1.000, Base Lr: 4.63e-03
+2025-04-21 21:40:00,852 transreid.train INFO: Epoch[36] Iteration[100/117] Loss: 0.363, Acc: 1.000, Base Lr: 4.63e-03
+2025-04-21 21:40:08,700 transreid.train INFO: Epoch 36 done. Time per batch: 0.491[s] Speed: 65.2[samples/s]
+2025-04-21 21:40:32,519 transreid.train INFO: Epoch[37] Iteration[50/117] Loss: 0.356, Acc: 1.000, Base Lr: 4.48e-03
+2025-04-21 21:40:58,111 transreid.train INFO: Epoch[37] Iteration[100/117] Loss: 0.358, Acc: 1.000, Base Lr: 4.48e-03
+2025-04-21 21:41:06,518 transreid.train INFO: Epoch 37 done. Time per batch: 0.498[s] Speed: 64.2[samples/s]
+2025-04-21 21:41:30,868 transreid.train INFO: Epoch[38] Iteration[50/117] Loss: 0.342, Acc: 1.000, Base Lr: 4.32e-03
+2025-04-21 21:41:56,839 transreid.train INFO: Epoch[38] Iteration[100/117] Loss: 0.348, Acc: 1.000, Base Lr: 4.32e-03
+2025-04-21 21:42:04,457 transreid.train INFO: Epoch 38 done. Time per batch: 0.504[s] Speed: 63.5[samples/s]
+2025-04-21 21:42:29,924 transreid.train INFO: Epoch[39] Iteration[50/117] Loss: 0.350, Acc: 0.999, Base Lr: 4.16e-03
+2025-04-21 21:42:56,357 transreid.train INFO: Epoch[39] Iteration[100/117] Loss: 0.350, Acc: 0.999, Base Lr: 4.16e-03
+2025-04-21 21:43:04,843 transreid.train INFO: Epoch 39 done. Time per batch: 0.521[s] Speed: 61.5[samples/s]
+2025-04-21 21:43:28,722 transreid.train INFO: Epoch[40] Iteration[50/117] Loss: 0.343, Acc: 1.000, Base Lr: 4.01e-03
+2025-04-21 21:43:53,852 transreid.train INFO: Epoch[40] Iteration[100/117] Loss: 0.346, Acc: 1.000, Base Lr: 4.01e-03
+2025-04-21 21:44:02,337 transreid.train INFO: Epoch 40 done. Time per batch: 0.496[s] Speed: 64.6[samples/s]
+The test feature is normalized
+qf.num, gf.num 836 836
+qf.shape, gf.shape torch.Size([2304]) torch.Size([2304])
+=> Computing DistMat with euclidean_distance
+2025-04-21 21:44:09,533 transreid.train INFO: Validation Results - Epoch: 40
+2025-04-21 21:44:09,533 transreid.train INFO: mAP: 64.1%
+2025-04-21 21:44:09,533 transreid.train INFO: CMC curve, Rank-1  :65.2%
+2025-04-21 21:44:09,533 transreid.train INFO: CMC curve, Rank-5  :80.0%
+2025-04-21 21:44:09,533 transreid.train INFO: CMC curve, Rank-10 :87.2%
+2025-04-21 21:44:09,533 transreid.train INFO: Best result: 40 64.1% 65.2% 80.0% 87.2%
+2025-04-21 21:44:34,167 transreid.train INFO: Epoch[41] Iteration[50/117] Loss: 0.338, Acc: 1.000, Base Lr: 3.85e-03
+2025-04-21 21:44:59,527 transreid.train INFO: Epoch[41] Iteration[100/117] Loss: 0.344, Acc: 1.000, Base Lr: 3.85e-03
+2025-04-21 21:45:07,697 transreid.train INFO: Epoch 41 done. Time per batch: 0.500[s] Speed: 64.0[samples/s]
+2025-04-21 21:45:33,211 transreid.train INFO: Epoch[42] Iteration[50/117] Loss: 0.338, Acc: 1.000, Base Lr: 3.69e-03
+2025-04-21 21:45:56,258 transreid.train INFO: Epoch[42] Iteration[100/117] Loss: 0.341, Acc: 1.000, Base Lr: 3.69e-03
+2025-04-21 21:46:04,114 transreid.train INFO: Epoch 42 done. Time per batch: 0.486[s] Speed: 65.8[samples/s]
+2025-04-21 21:46:29,481 transreid.train INFO: Epoch[43] Iteration[50/117] Loss: 0.340, Acc: 0.999, Base Lr: 3.54e-03
+2025-04-21 21:46:54,813 transreid.train INFO: Epoch[43] Iteration[100/117] Loss: 0.343, Acc: 1.000, Base Lr: 3.54e-03
+2025-04-21 21:47:02,470 transreid.train INFO: Epoch 43 done. Time per batch: 0.507[s] Speed: 63.1[samples/s]
+2025-04-21 21:47:26,915 transreid.train INFO: Epoch[44] Iteration[50/117] Loss: 0.338, Acc: 1.000, Base Lr: 3.38e-03
+2025-04-21 21:47:51,184 transreid.train INFO: Epoch[44] Iteration[100/117] Loss: 0.338, Acc: 1.000, Base Lr: 3.38e-03
+2025-04-21 21:47:58,678 transreid.train INFO: Epoch 44 done. Time per batch: 0.485[s] Speed: 66.0[samples/s]
+2025-04-21 21:48:23,574 transreid.train INFO: Epoch[45] Iteration[50/117] Loss: 0.335, Acc: 0.999, Base Lr: 3.23e-03
+2025-04-21 21:48:49,463 transreid.train INFO: Epoch[45] Iteration[100/117] Loss: 0.332, Acc: 1.000, Base Lr: 3.23e-03
+2025-04-21 21:48:57,919 transreid.train INFO: Epoch 45 done. Time per batch: 0.511[s] Speed: 62.7[samples/s]
+The test feature is normalized
+qf.num, gf.num 836 836
+qf.shape, gf.shape torch.Size([2304]) torch.Size([2304])
+=> Computing DistMat with euclidean_distance
+2025-04-21 21:49:05,177 transreid.train INFO: Validation Results - Epoch: 45
+2025-04-21 21:49:05,177 transreid.train INFO: mAP: 64.8%
+2025-04-21 21:49:05,177 transreid.train INFO: CMC curve, Rank-1  :66.3%
+2025-04-21 21:49:05,177 transreid.train INFO: CMC curve, Rank-5  :79.8%
+2025-04-21 21:49:05,177 transreid.train INFO: CMC curve, Rank-10 :86.6%
+2025-04-21 21:49:05,178 transreid.train INFO: Best result: 45 64.8% 66.3% 79.8% 86.6%
+2025-04-21 21:49:30,165 transreid.train INFO: Epoch[46] Iteration[50/117] Loss: 0.331, Acc: 1.000, Base Lr: 3.08e-03
+2025-04-21 21:49:55,836 transreid.train INFO: Epoch[46] Iteration[100/117] Loss: 0.335, Acc: 1.000, Base Lr: 3.08e-03
+2025-04-21 21:50:03,942 transreid.train INFO: Epoch 46 done. Time per batch: 0.510[s] Speed: 62.8[samples/s]
+2025-04-21 21:50:29,514 transreid.train INFO: Epoch[47] Iteration[50/117] Loss: 0.329, Acc: 1.000, Base Lr: 2.92e-03
+2025-04-21 21:50:56,269 transreid.train INFO: Epoch[47] Iteration[100/117] Loss: 0.327, Acc: 1.000, Base Lr: 2.92e-03
+2025-04-21 21:51:04,544 transreid.train INFO: Epoch 47 done. Time per batch: 0.527[s] Speed: 60.7[samples/s]
+2025-04-21 21:51:32,087 transreid.train INFO: Epoch[48] Iteration[50/117] Loss: 0.353, Acc: 0.999, Base Lr: 2.77e-03
+2025-04-21 21:51:59,800 transreid.train INFO: Epoch[48] Iteration[100/117] Loss: 0.339, Acc: 1.000, Base Lr: 2.77e-03
+2025-04-21 21:52:08,391 transreid.train INFO: Epoch 48 done. Time per batch: 0.550[s] Speed: 58.1[samples/s]
+2025-04-21 21:52:35,947 transreid.train INFO: Epoch[49] Iteration[50/117] Loss: 0.327, Acc: 1.000, Base Lr: 2.63e-03
+2025-04-21 21:53:03,310 transreid.train INFO: Epoch[49] Iteration[100/117] Loss: 0.327, Acc: 1.000, Base Lr: 2.63e-03
+2025-04-21 21:53:11,111 transreid.train INFO: Epoch 49 done. Time per batch: 0.545[s] Speed: 58.7[samples/s]
+2025-04-21 21:53:38,810 transreid.train INFO: Epoch[50] Iteration[50/117] Loss: 0.326, Acc: 1.000, Base Lr: 2.48e-03
+2025-04-21 21:54:05,436 transreid.train INFO: Epoch[50] Iteration[100/117] Loss: 0.328, Acc: 1.000, Base Lr: 2.48e-03
+2025-04-21 21:54:13,849 transreid.train INFO: Epoch 50 done. Time per batch: 0.541[s] Speed: 59.2[samples/s]
+The test feature is normalized
+qf.num, gf.num 836 836
+qf.shape, gf.shape torch.Size([2304]) torch.Size([2304])
+=> Computing DistMat with euclidean_distance
+2025-04-21 21:54:20,929 transreid.train INFO: Validation Results - Epoch: 50
+2025-04-21 21:54:20,930 transreid.train INFO: mAP: 67.0%
+2025-04-21 21:54:20,930 transreid.train INFO: CMC curve, Rank-1  :69.4%
+2025-04-21 21:54:20,930 transreid.train INFO: CMC curve, Rank-5  :81.6%
+2025-04-21 21:54:20,930 transreid.train INFO: CMC curve, Rank-10 :87.6%
+2025-04-21 21:54:20,930 transreid.train INFO: Best result: 50 67.0% 69.4% 81.6% 87.6%
+2025-04-21 21:54:46,854 transreid.train INFO: Epoch[51] Iteration[50/117] Loss: 0.331, Acc: 1.000, Base Lr: 2.34e-03
+2025-04-21 21:55:13,035 transreid.train INFO: Epoch[51] Iteration[100/117] Loss: 0.326, Acc: 1.000, Base Lr: 2.34e-03
+2025-04-21 21:55:21,667 transreid.train INFO: Epoch 51 done. Time per batch: 0.523[s] Speed: 61.2[samples/s]
+2025-04-21 21:55:48,789 transreid.train INFO: Epoch[52] Iteration[50/117] Loss: 0.329, Acc: 1.000, Base Lr: 2.20e-03
+2025-04-21 21:56:15,420 transreid.train INFO: Epoch[52] Iteration[100/117] Loss: 0.326, Acc: 1.000, Base Lr: 2.20e-03
+2025-04-21 21:56:23,740 transreid.train INFO: Epoch 52 done. Time per batch: 0.535[s] Speed: 59.8[samples/s]
+2025-04-21 21:56:51,099 transreid.train INFO: Epoch[53] Iteration[50/117] Loss: 0.321, Acc: 1.000, Base Lr: 2.06e-03
+2025-04-21 21:57:17,566 transreid.train INFO: Epoch[53] Iteration[100/117] Loss: 0.329, Acc: 1.000, Base Lr: 2.06e-03
+2025-04-21 21:57:25,957 transreid.train INFO: Epoch 53 done. Time per batch: 0.536[s] Speed: 59.7[samples/s]
+2025-04-21 21:57:52,913 transreid.train INFO: Epoch[54] Iteration[50/117] Loss: 0.326, Acc: 1.000, Base Lr: 1.92e-03
+2025-04-21 21:58:19,763 transreid.train INFO: Epoch[54] Iteration[100/117] Loss: 0.323, Acc: 1.000, Base Lr: 1.92e-03
+2025-04-21 21:58:28,304 transreid.train INFO: Epoch 54 done. Time per batch: 0.537[s] Speed: 59.5[samples/s]
+2025-04-21 21:58:53,961 transreid.train INFO: Epoch[55] Iteration[50/117] Loss: 0.321, Acc: 1.000, Base Lr: 1.79e-03
+2025-04-21 21:59:20,008 transreid.train INFO: Epoch[55] Iteration[100/117] Loss: 0.322, Acc: 1.000, Base Lr: 1.79e-03
+2025-04-21 21:59:27,870 transreid.train INFO: Epoch 55 done. Time per batch: 0.518[s] Speed: 61.8[samples/s]
+The test feature is normalized
+qf.num, gf.num 836 836
+qf.shape, gf.shape torch.Size([2304]) torch.Size([2304])
+=> Computing DistMat with euclidean_distance
+2025-04-21 21:59:34,464 transreid.train INFO: Validation Results - Epoch: 55
+2025-04-21 21:59:34,464 transreid.train INFO: mAP: 66.5%
+2025-04-21 21:59:34,464 transreid.train INFO: CMC curve, Rank-1  :68.1%
+2025-04-21 21:59:34,464 transreid.train INFO: CMC curve, Rank-5  :81.5%
+2025-04-21 21:59:34,464 transreid.train INFO: CMC curve, Rank-10 :87.2%
+2025-04-21 21:59:34,464 transreid.train INFO: Best result: 50 67.0% 69.4% 81.6% 87.6%
+2025-04-21 22:00:00,646 transreid.train INFO: Epoch[56] Iteration[50/117] Loss: 0.316, Acc: 1.000, Base Lr: 1.66e-03
+2025-04-21 22:00:27,522 transreid.train INFO: Epoch[56] Iteration[100/117] Loss: 0.325, Acc: 1.000, Base Lr: 1.66e-03
+2025-04-21 22:00:35,263 transreid.train INFO: Epoch 56 done. Time per batch: 0.528[s] Speed: 60.7[samples/s]
+2025-04-21 22:01:01,835 transreid.train INFO: Epoch[57] Iteration[50/117] Loss: 0.319, Acc: 1.000, Base Lr: 1.54e-03
+2025-04-21 22:01:28,178 transreid.train INFO: Epoch[57] Iteration[100/117] Loss: 0.318, Acc: 1.000, Base Lr: 1.54e-03
+2025-04-21 22:01:36,741 transreid.train INFO: Epoch 57 done. Time per batch: 0.530[s] Speed: 60.4[samples/s]
+2025-04-21 22:02:03,951 transreid.train INFO: Epoch[58] Iteration[50/117] Loss: 0.320, Acc: 1.000, Base Lr: 1.42e-03
+2025-04-21 22:02:30,660 transreid.train INFO: Epoch[58] Iteration[100/117] Loss: 0.317, Acc: 1.000, Base Lr: 1.42e-03
+2025-04-21 22:02:39,650 transreid.train INFO: Epoch 58 done. Time per batch: 0.542[s] Speed: 59.0[samples/s]
+2025-04-21 22:03:07,246 transreid.train INFO: Epoch[59] Iteration[50/117] Loss: 0.316, Acc: 1.000, Base Lr: 1.30e-03
+2025-04-21 22:03:33,243 transreid.train INFO: Epoch[59] Iteration[100/117] Loss: 0.321, Acc: 1.000, Base Lr: 1.30e-03
+2025-04-21 22:03:40,644 transreid.train INFO: Epoch 59 done. Time per batch: 0.530[s] Speed: 60.3[samples/s]
+2025-04-21 22:04:08,157 transreid.train INFO: Epoch[60] Iteration[50/117] Loss: 0.322, Acc: 1.000, Base Lr: 1.19e-03
+2025-04-21 22:04:34,948 transreid.train INFO: Epoch[60] Iteration[100/117] Loss: 0.321, Acc: 1.000, Base Lr: 1.19e-03
+2025-04-21 22:04:42,829 transreid.train INFO: Epoch 60 done. Time per batch: 0.541[s] Speed: 59.2[samples/s]
+The test feature is normalized
+qf.num, gf.num 836 836
+qf.shape, gf.shape torch.Size([2304]) torch.Size([2304])
+=> Computing DistMat with euclidean_distance
+2025-04-21 22:04:49,138 transreid.train INFO: Validation Results - Epoch: 60
+2025-04-21 22:04:49,138 transreid.train INFO: mAP: 65.7%
+2025-04-21 22:04:49,138 transreid.train INFO: CMC curve, Rank-1  :68.2%
+2025-04-21 22:04:49,138 transreid.train INFO: CMC curve, Rank-5  :81.0%
+2025-04-21 22:04:49,138 transreid.train INFO: CMC curve, Rank-10 :86.7%
+2025-04-21 22:04:49,138 transreid.train INFO: Best result: 50 67.0% 69.4% 81.6% 87.6%
+2025-04-21 22:05:16,707 transreid.train INFO: Epoch[61] Iteration[50/117] Loss: 0.318, Acc: 1.000, Base Lr: 1.08e-03
+2025-04-21 22:05:43,731 transreid.train INFO: Epoch[61] Iteration[100/117] Loss: 0.320, Acc: 1.000, Base Lr: 1.08e-03
+2025-04-21 22:05:52,512 transreid.train INFO: Epoch 61 done. Time per batch: 0.545[s] Speed: 58.7[samples/s]
+2025-04-21 22:06:19,429 transreid.train INFO: Epoch[62] Iteration[50/117] Loss: 0.314, Acc: 1.000, Base Lr: 9.72e-04
+2025-04-21 22:06:46,247 transreid.train INFO: Epoch[62] Iteration[100/117] Loss: 0.313, Acc: 1.000, Base Lr: 9.72e-04
+2025-04-21 22:06:54,317 transreid.train INFO: Epoch 62 done. Time per batch: 0.537[s] Speed: 59.5[samples/s]
+2025-04-21 22:07:21,429 transreid.train INFO: Epoch[63] Iteration[50/117] Loss: 0.313, Acc: 0.999, Base Lr: 8.73e-04
+2025-04-21 22:07:48,086 transreid.train INFO: Epoch[63] Iteration[100/117] Loss: 0.314, Acc: 1.000, Base Lr: 8.73e-04
+2025-04-21 22:07:56,487 transreid.train INFO: Epoch 63 done. Time per batch: 0.536[s] Speed: 59.7[samples/s]
+2025-04-21 22:08:23,743 transreid.train INFO: Epoch[64] Iteration[50/117] Loss: 0.315, Acc: 1.000, Base Lr: 7.78e-04
+2025-04-21 22:08:50,574 transreid.train INFO: Epoch[64] Iteration[100/117] Loss: 0.315, Acc: 1.000, Base Lr: 7.78e-04
+2025-04-21 22:08:58,941 transreid.train INFO: Epoch 64 done. Time per batch: 0.538[s] Speed: 59.4[samples/s]
+2025-04-21 22:09:26,274 transreid.train INFO: Epoch[65] Iteration[50/117] Loss: 0.315, Acc: 1.000, Base Lr: 6.89e-04
+2025-04-21 22:09:52,950 transreid.train INFO: Epoch[65] Iteration[100/117] Loss: 0.315, Acc: 1.000, Base Lr: 6.89e-04
+2025-04-21 22:10:01,522 transreid.train INFO: Epoch 65 done. Time per batch: 0.539[s] Speed: 59.3[samples/s]
+The test feature is normalized
+qf.num, gf.num 836 836
+qf.shape, gf.shape torch.Size([2304]) torch.Size([2304])
+=> Computing DistMat with euclidean_distance
+2025-04-21 22:10:07,780 transreid.train INFO: Validation Results - Epoch: 65
+2025-04-21 22:10:07,780 transreid.train INFO: mAP: 67.0%
+2025-04-21 22:10:07,780 transreid.train INFO: CMC curve, Rank-1  :68.8%
+2025-04-21 22:10:07,780 transreid.train INFO: CMC curve, Rank-5  :81.6%
+2025-04-21 22:10:07,780 transreid.train INFO: CMC curve, Rank-10 :87.0%
+2025-04-21 22:10:07,780 transreid.train INFO: Best result: 50 67.0% 69.4% 81.6% 87.6%
+2025-04-21 22:10:34,817 transreid.train INFO: Epoch[66] Iteration[50/117] Loss: 0.319, Acc: 1.000, Base Lr: 6.04e-04
+2025-04-21 22:11:01,125 transreid.train INFO: Epoch[66] Iteration[100/117] Loss: 0.316, Acc: 1.000, Base Lr: 6.04e-04
+2025-04-21 22:11:09,501 transreid.train INFO: Epoch 66 done. Time per batch: 0.531[s] Speed: 60.3[samples/s]
+2025-04-21 22:11:36,173 transreid.train INFO: Epoch[67] Iteration[50/117] Loss: 0.311, Acc: 1.000, Base Lr: 5.25e-04
+2025-04-21 22:12:02,842 transreid.train INFO: Epoch[67] Iteration[100/117] Loss: 0.313, Acc: 1.000, Base Lr: 5.25e-04
+2025-04-21 22:12:11,177 transreid.train INFO: Epoch 67 done. Time per batch: 0.532[s] Speed: 60.2[samples/s]
+2025-04-21 22:12:36,167 transreid.train INFO: Epoch[68] Iteration[50/117] Loss: 0.317, Acc: 1.000, Base Lr: 4.51e-04
+2025-04-21 22:13:02,825 transreid.train INFO: Epoch[68] Iteration[100/117] Loss: 0.313, Acc: 1.000, Base Lr: 4.51e-04
+2025-04-21 22:13:11,401 transreid.train INFO: Epoch 68 done. Time per batch: 0.519[s] Speed: 61.6[samples/s]
+2025-04-21 22:13:38,101 transreid.train INFO: Epoch[69] Iteration[50/117] Loss: 0.312, Acc: 1.000, Base Lr: 3.83e-04
+2025-04-21 22:14:04,642 transreid.train INFO: Epoch[69] Iteration[100/117] Loss: 0.312, Acc: 1.000, Base Lr: 3.83e-04
+2025-04-21 22:14:12,922 transreid.train INFO: Epoch 69 done. Time per batch: 0.530[s] Speed: 60.3[samples/s]
+2025-04-21 22:14:40,380 transreid.train INFO: Epoch[70] Iteration[50/117] Loss: 0.313, Acc: 1.000, Base Lr: 3.20e-04
+2025-04-21 22:15:06,646 transreid.train INFO: Epoch[70] Iteration[100/117] Loss: 0.313, Acc: 1.000, Base Lr: 3.20e-04
+2025-04-21 22:15:14,489 transreid.train INFO: Epoch 70 done. Time per batch: 0.535[s] Speed: 59.8[samples/s]
+The test feature is normalized
+qf.num, gf.num 836 836
+qf.shape, gf.shape torch.Size([2304]) torch.Size([2304])
+=> Computing DistMat with euclidean_distance
+2025-04-21 22:15:22,245 transreid.train INFO: Validation Results - Epoch: 70
+2025-04-21 22:15:22,245 transreid.train INFO: mAP: 67.3%
+2025-04-21 22:15:22,245 transreid.train INFO: CMC curve, Rank-1  :70.1%
+2025-04-21 22:15:22,245 transreid.train INFO: CMC curve, Rank-5  :82.3%
+2025-04-21 22:15:22,245 transreid.train INFO: CMC curve, Rank-10 :87.7%
+2025-04-21 22:15:22,245 transreid.train INFO: Best result: 70 67.3% 70.1% 82.3% 87.7%
+2025-04-21 22:15:49,446 transreid.train INFO: Epoch[71] Iteration[50/117] Loss: 0.310, Acc: 1.000, Base Lr: 2.63e-04
+2025-04-21 22:16:15,748 transreid.train INFO: Epoch[71] Iteration[100/117] Loss: 0.311, Acc: 1.000, Base Lr: 2.63e-04
+2025-04-21 22:16:24,330 transreid.train INFO: Epoch 71 done. Time per batch: 0.534[s] Speed: 59.9[samples/s]
+2025-04-21 22:16:50,325 transreid.train INFO: Epoch[72] Iteration[50/117] Loss: 0.311, Acc: 0.999, Base Lr: 2.11e-04
+2025-04-21 22:17:16,551 transreid.train INFO: Epoch[72] Iteration[100/117] Loss: 0.312, Acc: 1.000, Base Lr: 2.11e-04
+2025-04-21 22:17:25,046 transreid.train INFO: Epoch 72 done. Time per batch: 0.523[s] Speed: 61.1[samples/s]
+2025-04-21 22:17:52,216 transreid.train INFO: Epoch[73] Iteration[50/117] Loss: 0.310, Acc: 1.000, Base Lr: 1.66e-04
+2025-04-21 22:18:18,779 transreid.train INFO: Epoch[73] Iteration[100/117] Loss: 0.311, Acc: 1.000, Base Lr: 1.66e-04
+2025-04-21 22:18:27,358 transreid.train INFO: Epoch 73 done. Time per batch: 0.537[s] Speed: 59.6[samples/s]
+2025-04-21 22:18:54,202 transreid.train INFO: Epoch[74] Iteration[50/117] Loss: 0.308, Acc: 0.999, Base Lr: 1.26e-04
+2025-04-21 22:19:20,914 transreid.train INFO: Epoch[74] Iteration[100/117] Loss: 0.311, Acc: 1.000, Base Lr: 1.26e-04
+2025-04-21 22:19:29,352 transreid.train INFO: Epoch 74 done. Time per batch: 0.534[s] Speed: 59.9[samples/s]
+2025-04-21 22:19:56,084 transreid.train INFO: Epoch[75] Iteration[50/117] Loss: 0.309, Acc: 1.000, Base Lr: 9.27e-05
+2025-04-21 22:20:22,099 transreid.train INFO: Epoch[75] Iteration[100/117] Loss: 0.309, Acc: 1.000, Base Lr: 9.27e-05
+2025-04-21 22:20:30,392 transreid.train INFO: Epoch 75 done. Time per batch: 0.526[s] Speed: 60.8[samples/s]
+The test feature is normalized
+qf.num, gf.num 836 836
+qf.shape, gf.shape torch.Size([2304]) torch.Size([2304])
+=> Computing DistMat with euclidean_distance
+2025-04-21 22:20:36,762 transreid.train INFO: Validation Results - Epoch: 75
+2025-04-21 22:20:36,763 transreid.train INFO: mAP: 66.1%
+2025-04-21 22:20:36,763 transreid.train INFO: CMC curve, Rank-1  :68.8%
+2025-04-21 22:20:36,763 transreid.train INFO: CMC curve, Rank-5  :81.0%
+2025-04-21 22:20:36,763 transreid.train INFO: CMC curve, Rank-10 :86.7%
+2025-04-21 22:20:36,763 transreid.train INFO: Best result: 70 67.3% 70.1% 82.3% 87.7%
+2025-04-21 22:21:03,291 transreid.train INFO: Epoch[76] Iteration[50/117] Loss: 0.310, Acc: 1.000, Base Lr: 6.51e-05
+2025-04-21 22:21:29,178 transreid.train INFO: Epoch[76] Iteration[100/117] Loss: 0.312, Acc: 1.000, Base Lr: 6.51e-05
+2025-04-21 22:21:36,929 transreid.train INFO: Epoch 76 done. Time per batch: 0.522[s] Speed: 61.3[samples/s]
+2025-04-21 22:22:03,837 transreid.train INFO: Epoch[77] Iteration[50/117] Loss: 0.322, Acc: 1.000, Base Lr: 4.37e-05
+2025-04-21 22:22:30,523 transreid.train INFO: Epoch[77] Iteration[100/117] Loss: 0.315, Acc: 1.000, Base Lr: 4.37e-05
+2025-04-21 22:22:38,965 transreid.train INFO: Epoch 77 done. Time per batch: 0.535[s] Speed: 59.8[samples/s]
+2025-04-21 22:23:04,873 transreid.train INFO: Epoch[78] Iteration[50/117] Loss: 0.303, Acc: 1.000, Base Lr: 2.83e-05
+2025-04-21 22:23:31,291 transreid.train INFO: Epoch[78] Iteration[100/117] Loss: 0.307, Acc: 1.000, Base Lr: 2.83e-05
+2025-04-21 22:23:39,338 transreid.train INFO: Epoch 78 done. Time per batch: 0.525[s] Speed: 61.0[samples/s]
+2025-04-21 22:24:06,429 transreid.train INFO: Epoch[79] Iteration[50/117] Loss: 0.306, Acc: 0.999, Base Lr: 1.91e-05
+2025-04-21 22:24:32,507 transreid.train INFO: Epoch[79] Iteration[100/117] Loss: 0.309, Acc: 0.999, Base Lr: 1.91e-05
+2025-04-21 22:24:40,899 transreid.train INFO: Epoch 79 done. Time per batch: 0.531[s] Speed: 60.3[samples/s]
+2025-04-21 22:25:08,104 transreid.train INFO: Epoch[80] Iteration[50/117] Loss: 0.312, Acc: 0.999, Base Lr: 1.60e-05
+2025-04-21 22:25:34,517 transreid.train INFO: Epoch[80] Iteration[100/117] Loss: 0.313, Acc: 0.999, Base Lr: 1.60e-05
+2025-04-21 22:25:43,072 transreid.train INFO: Epoch 80 done. Time per batch: 0.536[s] Speed: 59.7[samples/s]
+The test feature is normalized
+qf.num, gf.num 836 836
+qf.shape, gf.shape torch.Size([2304]) torch.Size([2304])
+=> Computing DistMat with euclidean_distance
+2025-04-21 22:25:49,284 transreid.train INFO: Validation Results - Epoch: 80
+2025-04-21 22:25:49,284 transreid.train INFO: mAP: 66.9%
+2025-04-21 22:25:49,284 transreid.train INFO: CMC curve, Rank-1  :69.5%
+2025-04-21 22:25:49,284 transreid.train INFO: CMC curve, Rank-5  :82.5%
+2025-04-21 22:25:49,284 transreid.train INFO: CMC curve, Rank-10 :87.9%
+2025-04-21 22:25:49,284 transreid.train INFO: Best result: 70 67.3% 70.1% 82.3% 87.7%

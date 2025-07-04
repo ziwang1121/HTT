@@ -69,8 +69,8 @@ if __name__ == '__main__':
 
     fuse_strategy = cfg.MODEL.FUSE_STRATEGY
 
-    model = make_model(cfg, num_class=num_classes, camera_num=camera_num, view_num = view_num, train_mode=train_mode, fuse_strategy=fuse_strategy)
-    model.load_param(cfg.MODEL.PRETRAIN_PATH)
+    model = make_model(cfg, num_class=num_classes, camera_num=camera_num, view_num = view_num, train_mode=train_mode, fuse_strategy=fuse_strategy, mode='ttt')
+    model.load_param_finetune(cfg.MODEL.PRETRAIN_PATH)
     loss_func, center_criterion = make_loss_ttt(cfg, num_classes=num_classes)
 
     optimizer, optimizer_center = make_optimizer(cfg, model, center_criterion)
